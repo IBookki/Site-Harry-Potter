@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+      const name = document.getElementById("name").value; 
 
       const response = await fetch("http://localhost:3000/login", {
         method: "POST",

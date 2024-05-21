@@ -12,6 +12,7 @@ router.put("/users/:id", UsersController.update);
 router.delete("/users/:id", UsersController.destroy);
 router.get("users/:id/house", UsersController.gethouse);
 router.post("/login", AuthentificationController.login);
+
 router.get(
   "/getMyProfile",
   AuthMiddleware.authenticate,

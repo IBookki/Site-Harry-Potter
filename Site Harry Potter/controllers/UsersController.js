@@ -2,37 +2,12 @@ const prisma = require("../config/prisma");
 const { hashPassword } = require("../utils/bcrypt");
 
 class UsersController {
-  async store(req, res) {
-    try {
-      const { name, email, password } = req.body;
 
-      // Vérifier si le nom est fourni dans le formulaire
-      let userName = "Utilisateur Anonyme";
-      if (name && name.trim() !== "") {
-        userName = name.trim();
-      }
-
-      // Créer l'utilisateur dans la base de données
-      const user = await prisma.user.create({
-        data: {
-          name: userName,
-          email,
-          password: await hashPassword(password),
-        },
-      });
-
-      // Répondre avec les données de l'utilisateur créé
-      return res.status(201).json(user);
-    } catch (error) {
-      // En cas d'erreur, répondre avec un message d'erreur
-      return res.status(500).json({ error: error.message });
-    }
-  }
   async getMyProfile(req, res) {
     const user = req.user;
     return res.status(200).send(user);
   }
-
+  
   // app.get (/users)
   async index(req, res) {
     const users = await prisma.user.findMany();
@@ -42,21 +17,23 @@ class UsersController {
   // app.post (/users)
   async store(req, res) {
     try {
-      const body = req.body;
+      const { name, email, password } = req.body;
+      const userName = name && name.trim() !== "" ? name.trim() : "Utilisateur Anonyme";
+  
       const user = await prisma.user.create({
         data: {
-          name: body.name,
-          email: body.email,
-          password: await hashPassword(body.password),
+          name: userName,
+          email,
+          password: await hashPassword(password),
         },
       });
-      return res.status(201).send(user);
-    } catch (e) {
-      return res.status(500).send({
-        message: e.message,
-      });
+  
+      return res.status(201).json(user);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
     }
   }
+  
 
   // app.get (/users/:id)
   async show(req, res) {
