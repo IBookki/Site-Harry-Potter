@@ -2,6 +2,32 @@ const prisma = require("../config/prisma");
 const { hashPassword } = require("../utils/bcrypt");
 
 class UsersController {
+  async store(req, res) {
+    try {
+      const { name, email, password } = req.body;
+
+      // Vérifier si le nom est fourni dans le formulaire
+      let userName = "Utilisateur Anonyme";
+      if (name && name.trim() !== "") {
+        userName = name.trim();
+      }
+
+      // Créer l'utilisateur dans la base de données
+      const user = await prisma.user.create({
+        data: {
+          name: userName,
+          email,
+          password: await hashPassword(password),
+        },
+      });
+
+      // Répondre avec les données de l'utilisateur créé
+      return res.status(201).json(user);
+    } catch (error) {
+      // En cas d'erreur, répondre avec un message d'erreur
+      return res.status(500).json({ error: error.message });
+    }
+  }
   async getMyProfile(req, res) {
     const user = req.user;
     return res.status(200).send(user);
