@@ -225,15 +225,12 @@ menu_btn.addEventListener("click", () => {
   container.classList.toggle("active-cont");
 });
 
-// script.js
-
 async function getRandomCharacter() {
   try {
       const response = await fetch('https://hp-api.onrender.com/api/characters');
       const characters = await response.json();
 
       if (characters.length > 0) {
-          // Filtrer les personnages qui ont une image
           const charactersWithImage = characters.filter(character => character.image);
           
           if (charactersWithImage.length > 0) {
@@ -257,7 +254,7 @@ async function getRandomCharacter() {
 
 
 function displayBoosterCharacter(character) {
-  const container = document.getElementById('booster-container'); // Utiliser 'booster-container' au lieu de 'character-container'
+  const container = document.getElementById('booster-container'); 
   const imageUrl = character.image ? character.image : 'default-image-path.jpg';
   container.innerHTML = `
       <div class="booster-card">
@@ -270,6 +267,4 @@ function displayBoosterCharacter(character) {
   `;
 }
 
-
-// Attach event listener to the button
 document.querySelector('.button1 .hoverzone1').addEventListener('click', getRandomCharacter);
